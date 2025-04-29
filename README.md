@@ -10,7 +10,7 @@ This project implements a deep learning pipeline for denoising Low-Dose CT (LDCT
     cd project_root
     ```
 
-2.  **Create the directory structure:**
+2.  **Ensure this directory structure:**
     ```bash
     mkdir -p \
         configs \
