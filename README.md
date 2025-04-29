@@ -2,8 +2,6 @@
 
 This project implements a deep learning pipeline for denoising Low-Dose CT (LDCT) images using a CGNet architecture. The training process is guided by a composite loss function combining pixel-wise, SSIM, and perceptual components.
 
-## Project Structure
-project_root/├── configs/                 # Configuration files for experiments├── data/                    # Raw and processed data│   └── raw/                 # Original .IMA files│   └── processed/           # Converted and split data│       └── converted_png/│           ├── full_1mm/│           └── quarter_1mm/│       └── split/│           ├── train/│           │   ├── full/│           │   └── quarter/│           └── test/│               ├── full/│               └── quarter/├── models/                  # Model architectures (CGNet, Autoencoder)│   └── archs/               # CGNet and variants│   └── autoencoder/         # Autoencoder architectures├── datasets/                # Custom dataset classes├── losses/                  # Custom loss functions├── utils/                   # Utility functions and metrics├── scripts/                 # Executable scripts (train, test, preprocess, evaluate)├── experiments/             # Logs, checkpoints, and results from experiments├── requirements.txt         # Python dependencies├── setup.py                 # Optional: Project packaging└── README.md                # Project documentation
 ## Setup
 
 1.  **Clone the repository:**
