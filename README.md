@@ -34,7 +34,8 @@ This project implements a deep learning pipeline for denoising Low-Dose CT (LDCT
 
 Store your original `.IMA` files in `data/raw/`. For example:
 
-data/raw/L067/full_1mm/data/raw/L067/quarter_1mm/
+data/raw/L067/full_1mm/
+data/raw/L067/quarter_1mm/
 ### Preprocess the data:
 
 Convert `.IMA` files to 3-channel `.png` format and split into training and test sets:
