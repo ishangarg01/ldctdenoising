@@ -1,0 +1,76 @@
+# configs/ae_config.yaml
+
+# Configuration specifically for training the Autoencoder (scripts/train_ae.py)
+
+# --- Autoencoder Architecture Configuration ---
+# This section defines the AE model structure.
+# It should match the 'autoencoder.arch' section in default_config.yaml
+# but is included here for clarity when running train_ae.py directly.
+# autoencoder:
+#   arch:
+#     type: SimpleConvAE # Corresponds to the class name in models/autoencoder/simple_conv_ae.py
+#     args:
+#       in_channels: 3      # AE input channels (matches processed data)
+#       base_channels: 16   # Modest base channel count for AE for small GPU
+#       num_encoder_layers: 3 # Number of downsampling steps in the AE encoder
+#       # The AE decoder will mirror the encoder structure
+
+# # configs/ae_config.yaml
+
+# Configuration specifically for training the Autoencoder (scripts/train_ae.py)
+
+# --- Autoencoder Architecture Configuration ---
+autoencoder:
+  arch:
+    type: EnhancedConvAE # <-- Changed to the new class name
+    args:
+      in_channels: 3
+      base_channels: 32   # <-- Updated base channels (matches default in new class)
+      num_encoder_layers: 4 # <-- Updated number of layers (matches default in new class)
+
+
+
+# --- Dataset Configuration ---
+# This section defines the dataset used for AE training.
+# It should match the 'dataset' section in default_config.yaml
+# but is included here for clarity when running train_ae.py directly.
+dataset:
+  type: CTDenoiseDataset # Corresponds to the class name in datasets/ct_denoise_dataset.py
+  args:
+    root: data/split # Base directory containing 'train' and 'test' subfolders
+    # mode will be set to 'train' internally by train_ae.py
+  train_batch_size: 8 # Keep batch size reasonable for small GPU AE training
+  test_batch_size: 1 # Batch size for evaluation during AE training
+  num_workers: 4 # Number of subprocesses for data loading. Adjust based on your CPU cores.
+
+# --- Autoencoder Training Configuration ---
+# Settings specific to the AE training process.
+ae_training:
+  epochs: 50 # Number of epochs for AE training (typically fewer than main model)
+  device: cuda # Use 'cuda' if GPU is available, 'cpu' otherwise. Script handles fallback.
+  seed: 42 # Random seed for reproducibility
+  save_interval: 10 # Save an AE model checkpoint every N epochs
+  log_interval: 20 # Log AE training progress every N batches (iterations)
+  eval_interval: 10 # Evaluate on test set every N epochs during AE training (set to -1 to disable)
+  experiment_name: simple_conv_ae_train # Name for this AE training run
+  output_dir: data/processed/ae_runs # Base directory to save AE experiment results (checkpoints, logs)
+                                     # Checkpoints will be saved inside a timestamped subdir here.
+  resume_checkpoint: null # Path to an AE checkpoint to resume training from (set to null to start fresh)
+  loss_type: mse # Reconstruction loss for AE: 'mse' or 'mae'. MSE is standard for reconstruction.
+  optimizer:
+    type: Adam # Optimizer for AE training
+    args:
+      lr: 0.001 # Learning rate for AE training
+      weight_decay: 0.0
+  # Learning Rate Scheduler Configuration for AE Training (Optional)
+  # scheduler:
+  #   type: StepLR
+  #   args:
+  #     step_size: 30
+  #     gamma: 0.1
+
+# --- Autoencoder Evaluation Configuration ---
+# Metrics to calculate during AE evaluation (scripts/evaluate_ae.py and during training eval).
+ae_evaluation:
+  metrics: ["psnr", "ssim"] # Metrics to calculate for AE reconstruction quality
+  # device is taken from ae_training section

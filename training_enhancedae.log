@@ -1,0 +1,344 @@
+2025-04-27 17:27:24,231 - INFO - Target AE checkpoint path from main config: data/processed/pretrained_autoencoder.pth
+2025-04-27 17:27:24,374 - train_ae_logger - INFO - Starting AE training experiment: simple_conv_ae_train
+2025-04-27 17:27:24,374 - train_ae_logger - INFO - Run directory: data/processed/ae_runs/simple_conv_ae_train_20250427_172724
+2025-04-27 17:27:24,378 - train_ae_logger - INFO - AE Config:
+ae_evaluation:
+    metrics:
+    - psnr
+    - ssim
+ae_training:
+    device: cuda
+    epochs: 50
+    eval_interval: 10
+    experiment_name: simple_conv_ae_train
+    log_interval: 20
+    loss_type: mse
+    optimizer:
+        args:
+            lr: 0.001
+            weight_decay: 0.0
+        type: Adam
+    output_dir: data/processed/ae_runs
+    resume_checkpoint: null
+    save_interval: 10
+    seed: 42
+autoencoder:
+    arch:
+        args:
+            base_channels: 32
+            in_channels: 3
+            num_encoder_layers: 4
+        type: EnhancedConvAE
+dataset:
+    args:
+        root: data/split
+    num_workers: 4
+    test_batch_size: 1
+    train_batch_size: 8
+    type: CTDenoiseDataset
+
+2025-04-27 17:27:24,378 - train_ae_logger - INFO - Main Config (for AE path): configs/default_config.yaml
+2025-04-27 17:27:24,378 - train_ae_logger - INFO - Target AE checkpoint path from main config: data/processed/pretrained_autoencoder.pth
+2025-04-27 17:27:24,380 - train_ae_logger - INFO - TensorBoard logs saving to: data/processed/ae_runs/simple_conv_ae_train_20250427_172724/tensorboard
+2025-04-27 17:27:24,380 - train_ae_logger - INFO - Using device: cuda
+2025-04-27 17:27:24,402 - INFO - Initialized CTDenoiseDataset in 'train' mode with 3411 image pairs.
+2025-04-27 17:27:24,402 - train_ae_logger - INFO - Train DataLoader created with 427 batches.
+2025-04-27 17:27:24,405 - INFO - Initialized CTDenoiseDataset in 'test' mode with 526 image pairs.
+2025-04-27 17:27:24,405 - train_ae_logger - INFO - Eval DataLoader created with 526 batches.
+2025-04-27 17:27:24,405 - INFO - Scanning directory for Autoencoder modules: /home/user/Desktop/ishan/cgv2/models/autoencoder
+2025-04-27 17:27:24,406 - INFO - Successfully imported Autoencoder module: models.autoencoder.simple_conv_ae
+2025-04-27 17:27:24,407 - INFO - Successfully imported Autoencoder module: models.autoencoder.enhanced_conv_ae
+2025-04-27 17:27:24,407 - INFO - Defining Autoencoder of type: EnhancedConvAE with args: {'in_channels': 3, 'base_channels': 32, 'num_encoder_layers': 4}
+2025-04-27 17:27:24,407 - INFO - Instantiating AE class 'EnhancedConvAE' from module 'models.autoencoder.enhanced_conv_ae'
+2025-04-27 17:27:24,538 - INFO - EnhancedConvAE Encoder created with 4 downsampling stages.
+2025-04-27 17:27:24,538 - INFO - Encoder output channels: 512
+2025-04-27 17:27:24,565 - INFO - EnhancedConvAE Decoder created with 4 upsampling stages.
+2025-04-27 17:27:24,802 - train_ae_logger - INFO - Successfully imported and defined Autoencoder model.
+2025-04-27 17:27:24,803 - train_ae_logger - INFO - Autoencoder Model:
+EnhancedConvAE(
+  (encoder): Sequential(
+    (0): Sequential(
+      (0): Conv2d(3, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU(inplace=True)
+    )
+    (1): Sequential(
+      (0): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU(inplace=True)
+      (2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace=True)
+      (4): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (5): ReLU(inplace=True)
+    )
+    (2): Sequential(
+      (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU(inplace=True)
+      (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace=True)
+      (4): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (5): ReLU(inplace=True)
+    )
+    (3): Sequential(
+      (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU(inplace=True)
+      (2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace=True)
+      (4): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (5): ReLU(inplace=True)
+    )
+    (4): Sequential(
+      (0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU(inplace=True)
+      (2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace=True)
+      (4): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+      (5): ReLU(inplace=True)
+    )
+  )
+  (decoder): Sequential(
+    (0): Sequential(
+      (0): ConvTranspose2d(512, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+      (1): ReLU(inplace=True)
+      (2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace=True)
+      (4): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (5): ReLU(inplace=True)
+    )
+    (1): Sequential(
+      (0): ConvTranspose2d(256, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+      (1): ReLU(inplace=True)
+      (2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace=True)
+      (4): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (5): ReLU(inplace=True)
+    )
+    (2): Sequential(
+      (0): ConvTranspose2d(128, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+      (1): ReLU(inplace=True)
+      (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace=True)
+      (4): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (5): ReLU(inplace=True)
+    )
+    (3): Sequential(
+      (0): ConvTranspose2d(64, 32, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+      (1): ReLU(inplace=True)
+      (2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace=True)
+      (4): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (5): ReLU(inplace=True)
+    )
+    (4): Conv2d(32, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (5): Sigmoid()
+  )
+)
+2025-04-27 17:27:24,803 - train_ae_logger - INFO - Using MSELoss for AE reconstruction.
+2025-04-27 17:27:24,803 - train_ae_logger - INFO - Optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 0.001
+    maximize: False
+    weight_decay: 0.0
+)
+2025-04-27 17:27:24,803 - train_ae_logger - INFO - Starting AE training...
+2025-04-27 17:27:24,804 - train_ae_logger - INFO - Epoch 0/50 starting...
+2025-04-27 17:27:38,486 - train_ae_logger - INFO - Epoch [0/50], Batch [20/427], Loss: 0.0846, Avg Loss: 0.0897
+2025-04-27 17:27:46,900 - train_ae_logger - INFO - Epoch [0/50], Batch [40/427], Loss: 0.0869, Avg Loss: 0.0866
+2025-04-27 17:27:55,318 - train_ae_logger - INFO - Epoch [0/50], Batch [60/427], Loss: 0.0704, Avg Loss: 0.0832
+2025-04-27 17:28:03,736 - train_ae_logger - INFO - Epoch [0/50], Batch [80/427], Loss: 0.0537, Avg Loss: 0.0816
+2025-04-27 17:28:12,157 - train_ae_logger - INFO - Epoch [0/50], Batch [100/427], Loss: 0.0830, Avg Loss: 0.0807
+2025-04-27 17:28:20,580 - train_ae_logger - INFO - Epoch [0/50], Batch [120/427], Loss: 0.0896, Avg Loss: 0.0799
+2025-04-27 17:28:29,003 - train_ae_logger - INFO - Epoch [0/50], Batch [140/427], Loss: 0.0942, Avg Loss: 0.0799
+2025-04-27 17:28:37,519 - train_ae_logger - INFO - Epoch [0/50], Batch [160/427], Loss: 0.0680, Avg Loss: 0.0798
+2025-04-27 17:28:46,375 - train_ae_logger - INFO - Epoch [0/50], Batch [180/427], Loss: 0.0880, Avg Loss: 0.0800
+2025-04-27 17:28:54,819 - train_ae_logger - INFO - Epoch [0/50], Batch [200/427], Loss: 0.0816, Avg Loss: 0.0802
+2025-04-27 17:29:03,243 - train_ae_logger - INFO - Epoch [0/50], Batch [220/427], Loss: 0.0967, Avg Loss: 0.0807
+2025-04-27 17:29:11,666 - train_ae_logger - INFO - Epoch [0/50], Batch [240/427], Loss: 0.0945, Avg Loss: 0.0808
+2025-04-27 17:29:20,640 - train_ae_logger - INFO - Epoch [0/50], Batch [260/427], Loss: 0.0983, Avg Loss: 0.0809
+2025-04-27 17:29:29,062 - train_ae_logger - INFO - Epoch [0/50], Batch [280/427], Loss: 0.0751, Avg Loss: 0.0811
+2025-04-27 17:29:37,486 - train_ae_logger - INFO - Epoch [0/50], Batch [300/427], Loss: 0.0861, Avg Loss: 0.0810
+2025-04-27 17:29:45,908 - train_ae_logger - INFO - Epoch [0/50], Batch [320/427], Loss: 0.0898, Avg Loss: 0.0810
+2025-04-27 17:29:54,336 - train_ae_logger - INFO - Epoch [0/50], Batch [340/427], Loss: 0.0932, Avg Loss: 0.0810
+2025-04-27 17:30:02,883 - train_ae_logger - INFO - Epoch [0/50], Batch [360/427], Loss: 0.0956, Avg Loss: 0.0809
+2025-04-27 17:30:11,645 - train_ae_logger - INFO - Epoch [0/50], Batch [380/427], Loss: 0.0783, Avg Loss: 0.0810
+2025-04-27 17:30:20,440 - train_ae_logger - INFO - Epoch [0/50], Batch [400/427], Loss: 0.0903, Avg Loss: 0.0808
+2025-04-27 17:30:29,484 - train_ae_logger - INFO - Epoch [0/50], Batch [420/427], Loss: 0.0749, Avg Loss: 0.0807
+2025-04-27 17:30:32,504 - train_ae_logger - INFO - Epoch 0 finished. Avg Loss: 0.0806. Epoch time: 187.70s
+2025-04-27 17:30:32,505 - train_ae_logger - INFO - Epoch 1/50 starting...
+2025-04-27 17:30:41,659 - train_ae_logger - INFO - Epoch [1/50], Batch [20/427], Loss: 0.0686, Avg Loss: 0.0810
+2025-04-27 17:30:50,598 - train_ae_logger - INFO - Epoch [1/50], Batch [40/427], Loss: 0.0772, Avg Loss: 0.0824
+2025-04-27 17:31:05,403 - train_ae_logger - INFO - Epoch [1/50], Batch [60/427], Loss: 0.0816, Avg Loss: 0.0821
+2025-04-27 17:31:23,630 - train_ae_logger - INFO - Epoch [1/50], Batch [80/427], Loss: 0.0960, Avg Loss: 0.0818
+2025-04-27 17:31:41,846 - train_ae_logger - INFO - Epoch [1/50], Batch [100/427], Loss: 0.0792, Avg Loss: 0.0820
+2025-04-27 17:32:00,058 - train_ae_logger - INFO - Epoch [1/50], Batch [120/427], Loss: 0.0847, Avg Loss: 0.0811
+2025-04-27 17:32:18,281 - train_ae_logger - INFO - Epoch [1/50], Batch [140/427], Loss: 0.0773, Avg Loss: 0.0812
+2025-04-27 17:32:36,503 - train_ae_logger - INFO - Epoch [1/50], Batch [160/427], Loss: 0.0902, Avg Loss: 0.0810
+2025-04-27 17:32:54,704 - train_ae_logger - INFO - Epoch [1/50], Batch [180/427], Loss: 0.0777, Avg Loss: 0.0810
+2025-04-27 17:33:12,904 - train_ae_logger - INFO - Epoch [1/50], Batch [200/427], Loss: 0.0892, Avg Loss: 0.0815
+2025-04-27 17:33:31,129 - train_ae_logger - INFO - Epoch [1/50], Batch [220/427], Loss: 0.0658, Avg Loss: 0.0814
+2025-04-27 17:33:49,348 - train_ae_logger - INFO - Epoch [1/50], Batch [240/427], Loss: 0.0778, Avg Loss: 0.0810
+2025-04-27 17:34:07,547 - train_ae_logger - INFO - Epoch [1/50], Batch [260/427], Loss: 0.0716, Avg Loss: 0.0808
+2025-04-27 17:34:25,757 - train_ae_logger - INFO - Epoch [1/50], Batch [280/427], Loss: 0.0847, Avg Loss: 0.0805
+2025-04-27 17:34:43,970 - train_ae_logger - INFO - Epoch [1/50], Batch [300/427], Loss: 0.0828, Avg Loss: 0.0806
+2025-04-27 17:35:02,183 - train_ae_logger - INFO - Epoch [1/50], Batch [320/427], Loss: 0.0766, Avg Loss: 0.0803
+2025-04-27 17:35:20,410 - train_ae_logger - INFO - Epoch [1/50], Batch [340/427], Loss: 0.0814, Avg Loss: 0.0803
+2025-04-27 17:35:38,634 - train_ae_logger - INFO - Epoch [1/50], Batch [360/427], Loss: 0.0826, Avg Loss: 0.0800
+2025-04-27 17:35:56,857 - train_ae_logger - INFO - Epoch [1/50], Batch [380/427], Loss: 0.0971, Avg Loss: 0.0801
+2025-04-27 17:36:15,067 - train_ae_logger - INFO - Epoch [1/50], Batch [400/427], Loss: 0.0885, Avg Loss: 0.0803
+2025-04-27 17:36:33,287 - train_ae_logger - INFO - Epoch [1/50], Batch [420/427], Loss: 0.0763, Avg Loss: 0.0803
+2025-04-27 17:36:39,137 - train_ae_logger - INFO - Epoch 1 finished. Avg Loss: 0.0801. Epoch time: 366.63s
+2025-04-27 17:36:39,137 - train_ae_logger - INFO - Epoch 2/50 starting...
+2025-04-27 17:36:57,568 - train_ae_logger - INFO - Epoch [2/50], Batch [20/427], Loss: 0.0902, Avg Loss: 0.0831
+2025-04-27 17:37:15,796 - train_ae_logger - INFO - Epoch [2/50], Batch [40/427], Loss: 0.0995, Avg Loss: 0.0821
+2025-04-27 17:37:34,011 - train_ae_logger - INFO - Epoch [2/50], Batch [60/427], Loss: 0.0916, Avg Loss: 0.0822
+2025-04-27 17:37:52,242 - train_ae_logger - INFO - Epoch [2/50], Batch [80/427], Loss: 0.0554, Avg Loss: 0.0817
+2025-04-27 17:38:10,490 - train_ae_logger - INFO - Epoch [2/50], Batch [100/427], Loss: 0.0982, Avg Loss: 0.0814
+2025-04-27 17:38:28,728 - train_ae_logger - INFO - Epoch [2/50], Batch [120/427], Loss: 0.0784, Avg Loss: 0.0811
+2025-04-27 17:38:46,953 - train_ae_logger - INFO - Epoch [2/50], Batch [140/427], Loss: 0.0900, Avg Loss: 0.0808
+2025-04-27 17:39:05,191 - train_ae_logger - INFO - Epoch [2/50], Batch [160/427], Loss: 0.0783, Avg Loss: 0.0804
+2025-04-27 17:39:23,415 - train_ae_logger - INFO - Epoch [2/50], Batch [180/427], Loss: 0.0722, Avg Loss: 0.0806
+2025-04-27 17:39:41,636 - train_ae_logger - INFO - Epoch [2/50], Batch [200/427], Loss: 0.0617, Avg Loss: 0.0800
+2025-04-27 17:39:59,877 - train_ae_logger - INFO - Epoch [2/50], Batch [220/427], Loss: 0.0818, Avg Loss: 0.0802
+2025-04-27 17:40:18,114 - train_ae_logger - INFO - Epoch [2/50], Batch [240/427], Loss: 0.0780, Avg Loss: 0.0801
+2025-04-27 17:40:36,334 - train_ae_logger - INFO - Epoch [2/50], Batch [260/427], Loss: 0.0995, Avg Loss: 0.0803
+2025-04-27 17:40:54,557 - train_ae_logger - INFO - Epoch [2/50], Batch [280/427], Loss: 0.0710, Avg Loss: 0.0801
+2025-04-27 17:41:12,787 - train_ae_logger - INFO - Epoch [2/50], Batch [300/427], Loss: 0.0795, Avg Loss: 0.0803
+2025-04-27 17:41:31,020 - train_ae_logger - INFO - Epoch [2/50], Batch [320/427], Loss: 0.0938, Avg Loss: 0.0802
+2025-04-27 17:41:49,263 - train_ae_logger - INFO - Epoch [2/50], Batch [340/427], Loss: 0.0965, Avg Loss: 0.0801
+2025-04-27 17:42:07,488 - train_ae_logger - INFO - Epoch [2/50], Batch [360/427], Loss: 0.0708, Avg Loss: 0.0803
+2025-04-27 17:42:25,720 - train_ae_logger - INFO - Epoch [2/50], Batch [380/427], Loss: 0.0638, Avg Loss: 0.0801
+2025-04-27 17:42:43,949 - train_ae_logger - INFO - Epoch [2/50], Batch [400/427], Loss: 0.0790, Avg Loss: 0.0800
+2025-04-27 17:43:02,176 - train_ae_logger - INFO - Epoch [2/50], Batch [420/427], Loss: 0.0875, Avg Loss: 0.0802
+2025-04-27 17:43:08,022 - train_ae_logger - INFO - Epoch 2 finished. Avg Loss: 0.0801. Epoch time: 388.88s
+2025-04-27 17:43:08,023 - train_ae_logger - INFO - Epoch 3/50 starting...
+2025-04-27 17:43:26,471 - train_ae_logger - INFO - Epoch [3/50], Batch [20/427], Loss: 0.0864, Avg Loss: 0.0815
+2025-04-27 17:43:44,706 - train_ae_logger - INFO - Epoch [3/50], Batch [40/427], Loss: 0.0730, Avg Loss: 0.0812
+2025-04-27 17:44:02,923 - train_ae_logger - INFO - Epoch [3/50], Batch [60/427], Loss: 0.0945, Avg Loss: 0.0811
+2025-04-27 17:44:21,161 - train_ae_logger - INFO - Epoch [3/50], Batch [80/427], Loss: 0.0604, Avg Loss: 0.0810
+2025-04-27 17:44:39,386 - train_ae_logger - INFO - Epoch [3/50], Batch [100/427], Loss: 0.0796, Avg Loss: 0.0809
+2025-04-27 17:44:57,622 - train_ae_logger - INFO - Epoch [3/50], Batch [120/427], Loss: 0.0581, Avg Loss: 0.0801
+2025-04-27 17:45:15,857 - train_ae_logger - INFO - Epoch [3/50], Batch [140/427], Loss: 0.0730, Avg Loss: 0.0802
+2025-04-27 17:45:34,092 - train_ae_logger - INFO - Epoch [3/50], Batch [160/427], Loss: 0.0928, Avg Loss: 0.0806
+2025-04-27 17:45:52,326 - train_ae_logger - INFO - Epoch [3/50], Batch [180/427], Loss: 0.0837, Avg Loss: 0.0804
+2025-04-27 17:46:10,557 - train_ae_logger - INFO - Epoch [3/50], Batch [200/427], Loss: 0.0631, Avg Loss: 0.0800
+2025-04-27 17:46:28,790 - train_ae_logger - INFO - Epoch [3/50], Batch [220/427], Loss: 0.0785, Avg Loss: 0.0798
+2025-04-27 17:46:47,026 - train_ae_logger - INFO - Epoch [3/50], Batch [240/427], Loss: 0.0932, Avg Loss: 0.0798
+2025-04-27 17:47:05,256 - train_ae_logger - INFO - Epoch [3/50], Batch [260/427], Loss: 0.0572, Avg Loss: 0.0795
+2025-04-27 17:47:23,490 - train_ae_logger - INFO - Epoch [3/50], Batch [280/427], Loss: 0.0629, Avg Loss: 0.0795
+2025-04-27 17:47:41,713 - train_ae_logger - INFO - Epoch [3/50], Batch [300/427], Loss: 0.0833, Avg Loss: 0.0796
+2025-04-27 17:47:59,951 - train_ae_logger - INFO - Epoch [3/50], Batch [320/427], Loss: 0.0913, Avg Loss: 0.0797
+2025-04-27 17:48:18,172 - train_ae_logger - INFO - Epoch [3/50], Batch [340/427], Loss: 0.0795, Avg Loss: 0.0796
+2025-04-27 17:48:36,397 - train_ae_logger - INFO - Epoch [3/50], Batch [360/427], Loss: 0.0629, Avg Loss: 0.0797
+2025-04-27 17:48:54,621 - train_ae_logger - INFO - Epoch [3/50], Batch [380/427], Loss: 0.0923, Avg Loss: 0.0799
+2025-04-27 17:49:12,829 - train_ae_logger - INFO - Epoch [3/50], Batch [400/427], Loss: 0.0937, Avg Loss: 0.0801
+2025-04-27 17:49:31,061 - train_ae_logger - INFO - Epoch [3/50], Batch [420/427], Loss: 0.0820, Avg Loss: 0.0801
+2025-04-27 17:49:36,919 - train_ae_logger - INFO - Epoch 3 finished. Avg Loss: 0.0801. Epoch time: 388.90s
+2025-04-27 17:49:36,920 - train_ae_logger - INFO - Epoch 4/50 starting...
+2025-04-27 17:49:55,412 - train_ae_logger - INFO - Epoch [4/50], Batch [20/427], Loss: 0.0653, Avg Loss: 0.0797
+2025-04-27 17:50:13,628 - train_ae_logger - INFO - Epoch [4/50], Batch [40/427], Loss: 0.0815, Avg Loss: 0.0797
+2025-04-27 17:50:31,861 - train_ae_logger - INFO - Epoch [4/50], Batch [60/427], Loss: 0.0991, Avg Loss: 0.0802
+2025-04-27 17:50:50,091 - train_ae_logger - INFO - Epoch [4/50], Batch [80/427], Loss: 0.0689, Avg Loss: 0.0793
+2025-04-27 17:51:08,322 - train_ae_logger - INFO - Epoch [4/50], Batch [100/427], Loss: 0.0720, Avg Loss: 0.0797
+2025-04-27 17:51:26,546 - train_ae_logger - INFO - Epoch [4/50], Batch [120/427], Loss: 0.0743, Avg Loss: 0.0794
+2025-04-27 17:51:44,787 - train_ae_logger - INFO - Epoch [4/50], Batch [140/427], Loss: 0.0932, Avg Loss: 0.0795
+2025-04-27 17:52:03,016 - train_ae_logger - INFO - Epoch [4/50], Batch [160/427], Loss: 0.0679, Avg Loss: 0.0793
+2025-04-27 17:52:21,258 - train_ae_logger - INFO - Epoch [4/50], Batch [180/427], Loss: 0.0800, Avg Loss: 0.0797
+2025-04-27 17:52:39,497 - train_ae_logger - INFO - Epoch [4/50], Batch [200/427], Loss: 0.0653, Avg Loss: 0.0795
+2025-04-27 17:52:57,745 - train_ae_logger - INFO - Epoch [4/50], Batch [220/427], Loss: 0.0893, Avg Loss: 0.0795
+2025-04-27 17:53:15,979 - train_ae_logger - INFO - Epoch [4/50], Batch [240/427], Loss: 0.0800, Avg Loss: 0.0796
+2025-04-27 17:53:34,209 - train_ae_logger - INFO - Epoch [4/50], Batch [260/427], Loss: 0.0894, Avg Loss: 0.0798
+2025-04-27 17:53:52,437 - train_ae_logger - INFO - Epoch [4/50], Batch [280/427], Loss: 0.0717, Avg Loss: 0.0798
+2025-04-27 17:54:10,663 - train_ae_logger - INFO - Epoch [4/50], Batch [300/427], Loss: 0.0728, Avg Loss: 0.0797
+2025-04-27 17:54:28,897 - train_ae_logger - INFO - Epoch [4/50], Batch [320/427], Loss: 0.0668, Avg Loss: 0.0796
+2025-04-27 17:54:47,121 - train_ae_logger - INFO - Epoch [4/50], Batch [340/427], Loss: 0.0787, Avg Loss: 0.0799
+2025-04-27 17:55:05,357 - train_ae_logger - INFO - Epoch [4/50], Batch [360/427], Loss: 0.0718, Avg Loss: 0.0799
+2025-04-27 17:55:23,586 - train_ae_logger - INFO - Epoch [4/50], Batch [380/427], Loss: 0.0851, Avg Loss: 0.0802
+2025-04-27 17:55:41,814 - train_ae_logger - INFO - Epoch [4/50], Batch [400/427], Loss: 0.0960, Avg Loss: 0.0802
+2025-04-27 17:56:00,048 - train_ae_logger - INFO - Epoch [4/50], Batch [420/427], Loss: 0.0854, Avg Loss: 0.0801
+2025-04-27 17:56:05,909 - train_ae_logger - INFO - Epoch 4 finished. Avg Loss: 0.0802. Epoch time: 388.99s
+2025-04-27 17:56:05,910 - train_ae_logger - INFO - Epoch 5/50 starting...
+2025-04-27 17:56:24,478 - train_ae_logger - INFO - Epoch [5/50], Batch [20/427], Loss: 0.0915, Avg Loss: 0.0792
+2025-04-27 17:56:42,712 - train_ae_logger - INFO - Epoch [5/50], Batch [40/427], Loss: 0.0928, Avg Loss: 0.0795
+2025-04-27 17:57:00,941 - train_ae_logger - INFO - Epoch [5/50], Batch [60/427], Loss: 0.0882, Avg Loss: 0.0789
+2025-04-27 17:57:19,161 - train_ae_logger - INFO - Epoch [5/50], Batch [80/427], Loss: 0.0957, Avg Loss: 0.0797
+2025-04-27 17:57:37,399 - train_ae_logger - INFO - Epoch [5/50], Batch [100/427], Loss: 0.0928, Avg Loss: 0.0801
+2025-04-27 17:57:55,639 - train_ae_logger - INFO - Epoch [5/50], Batch [120/427], Loss: 0.0960, Avg Loss: 0.0802
+2025-04-27 17:58:13,875 - train_ae_logger - INFO - Epoch [5/50], Batch [140/427], Loss: 0.0698, Avg Loss: 0.0800
+2025-04-27 17:58:32,118 - train_ae_logger - INFO - Epoch [5/50], Batch [160/427], Loss: 0.0925, Avg Loss: 0.0802
+2025-04-27 17:58:50,345 - train_ae_logger - INFO - Epoch [5/50], Batch [180/427], Loss: 0.0912, Avg Loss: 0.0805
+2025-04-27 17:59:08,564 - train_ae_logger - INFO - Epoch [5/50], Batch [200/427], Loss: 0.0791, Avg Loss: 0.0804
+2025-04-27 17:59:26,785 - train_ae_logger - INFO - Epoch [5/50], Batch [220/427], Loss: 0.0945, Avg Loss: 0.0804
+2025-04-27 17:59:45,016 - train_ae_logger - INFO - Epoch [5/50], Batch [240/427], Loss: 0.0689, Avg Loss: 0.0805
+2025-04-27 18:00:03,252 - train_ae_logger - INFO - Epoch [5/50], Batch [260/427], Loss: 0.0953, Avg Loss: 0.0808
+2025-04-27 18:00:21,492 - train_ae_logger - INFO - Epoch [5/50], Batch [280/427], Loss: 0.0710, Avg Loss: 0.0807
+2025-04-27 18:00:39,738 - train_ae_logger - INFO - Epoch [5/50], Batch [300/427], Loss: 0.0961, Avg Loss: 0.0805
+2025-04-27 18:00:56,233 - train_ae_logger - INFO - Epoch [5/50], Batch [320/427], Loss: 0.0770, Avg Loss: 0.0806
+2025-04-27 18:01:04,944 - train_ae_logger - INFO - Epoch [5/50], Batch [340/427], Loss: 0.0647, Avg Loss: 0.0805
+2025-04-27 18:01:14,727 - train_ae_logger - INFO - Epoch [5/50], Batch [360/427], Loss: 0.0896, Avg Loss: 0.0805
+2025-04-27 18:01:25,504 - train_ae_logger - INFO - Epoch [5/50], Batch [380/427], Loss: 0.0848, Avg Loss: 0.0803
+2025-04-27 18:01:36,655 - train_ae_logger - INFO - Epoch [5/50], Batch [400/427], Loss: 0.0714, Avg Loss: 0.0803
+2025-04-27 18:01:48,299 - train_ae_logger - INFO - Epoch [5/50], Batch [420/427], Loss: 0.0795, Avg Loss: 0.0802
+2025-04-27 18:01:52,079 - train_ae_logger - INFO - Epoch 5 finished. Avg Loss: 0.0801. Epoch time: 346.17s
+2025-04-27 18:01:52,080 - train_ae_logger - INFO - Epoch 6/50 starting...
+2025-04-27 18:02:04,639 - train_ae_logger - INFO - Epoch [6/50], Batch [20/427], Loss: 0.0740, Avg Loss: 0.0783
+2025-04-27 18:02:16,306 - train_ae_logger - INFO - Epoch [6/50], Batch [40/427], Loss: 0.0856, Avg Loss: 0.0795
+2025-04-27 18:02:28,812 - train_ae_logger - INFO - Epoch [6/50], Batch [60/427], Loss: 0.0795, Avg Loss: 0.0798
+2025-04-27 18:02:41,050 - train_ae_logger - INFO - Epoch [6/50], Batch [80/427], Loss: 0.0859, Avg Loss: 0.0796
+2025-04-27 18:02:53,286 - train_ae_logger - INFO - Epoch [6/50], Batch [100/427], Loss: 0.0887, Avg Loss: 0.0803
+2025-04-27 18:03:06,034 - train_ae_logger - INFO - Epoch [6/50], Batch [120/427], Loss: 0.0829, Avg Loss: 0.0807
+2025-04-27 18:03:18,201 - train_ae_logger - INFO - Epoch [6/50], Batch [140/427], Loss: 0.0806, Avg Loss: 0.0801
+2025-04-27 18:03:30,466 - train_ae_logger - INFO - Epoch [6/50], Batch [160/427], Loss: 0.0886, Avg Loss: 0.0802
+2025-04-27 18:03:42,818 - train_ae_logger - INFO - Epoch [6/50], Batch [180/427], Loss: 0.0801, Avg Loss: 0.0803
+2025-04-27 18:03:55,282 - train_ae_logger - INFO - Epoch [6/50], Batch [200/427], Loss: 0.0679, Avg Loss: 0.0801
+2025-04-27 18:04:07,899 - train_ae_logger - INFO - Epoch [6/50], Batch [220/427], Loss: 0.0760, Avg Loss: 0.0797
+2025-04-27 18:04:19,884 - train_ae_logger - INFO - Epoch [6/50], Batch [240/427], Loss: 0.0838, Avg Loss: 0.0799
+2025-04-27 18:04:32,013 - train_ae_logger - INFO - Epoch [6/50], Batch [260/427], Loss: 0.0749, Avg Loss: 0.0798
+2025-04-27 18:04:44,336 - train_ae_logger - INFO - Epoch [6/50], Batch [280/427], Loss: 0.0822, Avg Loss: 0.0802
+2025-04-27 18:04:56,416 - train_ae_logger - INFO - Epoch [6/50], Batch [300/427], Loss: 0.0806, Avg Loss: 0.0802
+2025-04-27 18:05:08,739 - train_ae_logger - INFO - Epoch [6/50], Batch [320/427], Loss: 0.0909, Avg Loss: 0.0803
+2025-04-27 18:05:21,046 - train_ae_logger - INFO - Epoch [6/50], Batch [340/427], Loss: 0.0806, Avg Loss: 0.0801
+2025-04-27 18:05:33,911 - train_ae_logger - INFO - Epoch [6/50], Batch [360/427], Loss: 0.0747, Avg Loss: 0.0803
+2025-04-27 18:05:46,057 - train_ae_logger - INFO - Epoch [6/50], Batch [380/427], Loss: 0.0672, Avg Loss: 0.0803
+2025-04-27 18:05:59,229 - train_ae_logger - INFO - Epoch [6/50], Batch [400/427], Loss: 0.0849, Avg Loss: 0.0803
+2025-04-27 18:06:11,631 - train_ae_logger - INFO - Epoch [6/50], Batch [420/427], Loss: 0.0730, Avg Loss: 0.0801
+2025-04-27 18:06:15,715 - train_ae_logger - INFO - Epoch 6 finished. Avg Loss: 0.0801. Epoch time: 263.64s
+2025-04-27 18:06:15,716 - train_ae_logger - INFO - Epoch 7/50 starting...
+2025-04-27 18:06:28,510 - train_ae_logger - INFO - Epoch [7/50], Batch [20/427], Loss: 0.0741, Avg Loss: 0.0822
+2025-04-27 18:06:41,146 - train_ae_logger - INFO - Epoch [7/50], Batch [40/427], Loss: 0.0800, Avg Loss: 0.0803
+2025-04-27 18:06:54,037 - train_ae_logger - INFO - Epoch [7/50], Batch [60/427], Loss: 0.0914, Avg Loss: 0.0804
+2025-04-27 18:07:07,078 - train_ae_logger - INFO - Epoch [7/50], Batch [80/427], Loss: 0.0888, Avg Loss: 0.0799
+2025-04-27 18:07:19,301 - train_ae_logger - INFO - Epoch [7/50], Batch [100/427], Loss: 0.0755, Avg Loss: 0.0804
+2025-04-27 18:07:31,454 - train_ae_logger - INFO - Epoch [7/50], Batch [120/427], Loss: 0.0702, Avg Loss: 0.0801
+2025-04-27 18:07:43,929 - train_ae_logger - INFO - Epoch [7/50], Batch [140/427], Loss: 0.0771, Avg Loss: 0.0798
+2025-04-27 18:07:56,788 - train_ae_logger - INFO - Epoch [7/50], Batch [160/427], Loss: 0.0989, Avg Loss: 0.0798
+2025-04-27 18:08:10,549 - train_ae_logger - INFO - Epoch [7/50], Batch [180/427], Loss: 0.0793, Avg Loss: 0.0803
+2025-04-27 18:08:23,749 - train_ae_logger - INFO - Epoch [7/50], Batch [200/427], Loss: 0.0825, Avg Loss: 0.0803
+2025-04-27 18:08:35,864 - train_ae_logger - INFO - Epoch [7/50], Batch [220/427], Loss: 0.0640, Avg Loss: 0.0803
+2025-04-27 18:08:49,436 - train_ae_logger - INFO - Epoch [7/50], Batch [240/427], Loss: 0.0734, Avg Loss: 0.0802
+2025-04-27 18:09:01,806 - train_ae_logger - INFO - Epoch [7/50], Batch [260/427], Loss: 0.0844, Avg Loss: 0.0801
+2025-04-27 18:09:15,099 - train_ae_logger - INFO - Epoch [7/50], Batch [280/427], Loss: 0.0900, Avg Loss: 0.0802
+2025-04-27 18:09:28,156 - train_ae_logger - INFO - Epoch [7/50], Batch [300/427], Loss: 0.0685, Avg Loss: 0.0801
+2025-04-27 18:09:41,121 - train_ae_logger - INFO - Epoch [7/50], Batch [320/427], Loss: 0.0814, Avg Loss: 0.0800
+2025-04-27 18:09:53,854 - train_ae_logger - INFO - Epoch [7/50], Batch [340/427], Loss: 0.0615, Avg Loss: 0.0800
+2025-04-27 18:10:07,203 - train_ae_logger - INFO - Epoch [7/50], Batch [360/427], Loss: 0.0689, Avg Loss: 0.0799
+2025-04-27 18:10:20,166 - train_ae_logger - INFO - Epoch [7/50], Batch [380/427], Loss: 0.0744, Avg Loss: 0.0799
+2025-04-27 18:10:33,014 - train_ae_logger - INFO - Epoch [7/50], Batch [400/427], Loss: 0.0710, Avg Loss: 0.0800
+2025-04-27 18:10:45,792 - train_ae_logger - INFO - Epoch [7/50], Batch [420/427], Loss: 0.0761, Avg Loss: 0.0800
+2025-04-27 18:10:49,946 - train_ae_logger - INFO - Epoch 7 finished. Avg Loss: 0.0801. Epoch time: 274.23s
+2025-04-27 18:10:49,947 - train_ae_logger - INFO - Epoch 8/50 starting...
+2025-04-27 18:11:02,554 - train_ae_logger - INFO - Epoch [8/50], Batch [20/427], Loss: 0.0613, Avg Loss: 0.0811
+2025-04-27 18:11:15,304 - train_ae_logger - INFO - Epoch [8/50], Batch [40/427], Loss: 0.0891, Avg Loss: 0.0807
+2025-04-27 18:11:28,255 - train_ae_logger - INFO - Epoch [8/50], Batch [60/427], Loss: 0.0646, Avg Loss: 0.0798
+2025-04-27 18:11:41,009 - train_ae_logger - INFO - Epoch [8/50], Batch [80/427], Loss: 0.0813, Avg Loss: 0.0797
+2025-04-27 18:11:53,805 - train_ae_logger - INFO - Epoch [8/50], Batch [100/427], Loss: 0.0774, Avg Loss: 0.0801
+2025-04-27 18:12:06,638 - train_ae_logger - INFO - Epoch [8/50], Batch [120/427], Loss: 0.0818, Avg Loss: 0.0799
+2025-04-27 18:12:19,817 - train_ae_logger - INFO - Epoch [8/50], Batch [140/427], Loss: 0.0898, Avg Loss: 0.0798
+2025-04-27 18:12:33,314 - train_ae_logger - INFO - Epoch [8/50], Batch [160/427], Loss: 0.0944, Avg Loss: 0.0805
+2025-04-27 18:12:46,255 - train_ae_logger - INFO - Epoch [8/50], Batch [180/427], Loss: 0.0965, Avg Loss: 0.0801
+2025-04-27 18:12:59,458 - train_ae_logger - INFO - Epoch [8/50], Batch [200/427], Loss: 0.0637, Avg Loss: 0.0801
+2025-04-27 18:13:12,591 - train_ae_logger - INFO - Epoch [8/50], Batch [220/427], Loss: 0.0994, Avg Loss: 0.0799

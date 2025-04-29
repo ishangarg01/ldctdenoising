@@ -1,0 +1,51 @@
+2025-04-24 14:59:08,451 - evaluate_ae_logger - INFO - Starting AE evaluation using checkpoint: data/processed/pretrained_autoencoder.pth
+2025-04-24 14:59:08,453 - evaluate_ae_logger - INFO - Config:
+ae_evaluation:
+    metrics:
+    - psnr
+    - ssim
+ae_training:
+    device: cuda
+    epochs: 50
+    eval_interval: 10
+    experiment_name: simple_conv_ae_train
+    log_interval: 20
+    loss_type: mse
+    optimizer:
+        args:
+            lr: 0.001
+            weight_decay: 0.0
+        type: Adam
+    output_dir: data/processed/ae_runs
+    resume_checkpoint: null
+    save_interval: 10
+    seed: 42
+autoencoder:
+    arch:
+        args:
+            base_channels: 16
+            in_channels: 3
+            num_encoder_layers: 3
+        type: SimpleConvAE
+dataset:
+    args:
+        root: data/processed/split
+    num_workers: 4
+    test_batch_size: 1
+    train_batch_size: 8
+    type: CTDenoiseDataset
+
+2025-04-24 14:59:08,486 - evaluate_ae_logger - INFO - Using device: cuda
+2025-04-24 14:59:08,486 - evaluate_ae_logger - INFO - Saving evaluation results to: results/ae_eval
+2025-04-24 14:59:08,487 - evaluate_ae_logger - INFO - Will save up to 20 reconstructed images.
+2025-04-24 14:59:08,489 - evaluate_ae_logger - INFO - Eval DataLoader created with 788 batches.
+2025-04-24 14:59:08,604 - evaluate_ae_logger - INFO - Successfully imported and defined Autoencoder model.
+2025-04-24 14:59:08,604 - evaluate_ae_logger - INFO - Loading model weights from data/processed/pretrained_autoencoder.pth
+2025-04-24 14:59:08,611 - evaluate_ae_logger - INFO - Model weights loaded successfully.
+2025-04-24 14:59:08,611 - evaluate_ae_logger - INFO - Starting AE reconstruction evaluation...
+2025-04-24 14:59:09,718 - evaluate_ae_logger - INFO - Saved 10 reconstructed images so far.
+2025-04-24 14:59:10,492 - evaluate_ae_logger - INFO - Saved 20 reconstructed images so far.
+2025-04-24 14:59:10,492 - evaluate_ae_logger - INFO - Saved 20 images. Stopping batch processing.
+2025-04-24 14:59:10,505 - evaluate_ae_logger - INFO - AE Evaluation finished in 1.89s. Average metrics over 20 samples:
+2025-04-24 14:59:10,505 - evaluate_ae_logger - INFO -   Avg PSNR: 47.4333
+2025-04-24 14:59:10,505 - evaluate_ae_logger - INFO -   Avg SSIM: 0.9930
