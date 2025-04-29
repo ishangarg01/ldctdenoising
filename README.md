@@ -1,90 +1,93 @@
-LDCT Image Denoising using CGNet with Perceptual and Multi-Loss Supervision
-This project implements a deep learning pipeline for denoising Low-Dose CT (LDCT) images using a CGNet architecture, supervised by a composite loss function incorporating pixel-wise, SSIM, and perceptual components.
+# LDCT Image Denoising using CGNet with Perceptual and Multi-Loss Supervision
 
-Project Structure
-project_root/
-├── configs/                 # Configuration files for experiments
-├── data/                    # Raw and processed data
-├── models/                  # Model architectures (CGNet, Autoencoder)
-├── datasets/                # Custom dataset classes
-├── losses/                  # Custom loss functions
-├── utils/                   # Utility functions
-├── scripts/                 # Executable scripts (train, test, preprocess, evaluate)
-├── experiments/             # Results of training runs (checkpoints, logs)
-├── README.md                # This file
-├── requirements.txt         # Python dependencies
-└── setup.py                 # Optional: Project packaging
+This project implements a deep learning pipeline for denoising Low-Dose CT (LDCT) images using a CGNet architecture. The training process is guided by a composite loss function combining pixel-wise, SSIM, and perceptual components.
 
-Setup
-Clone the repository:
+## Project Structure
+project_root/├── configs/                 # Configuration files for experiments├── data/                    # Raw and processed data│   └── raw/                 # Original .IMA files│   └── processed/           # Converted and split data│       └── converted_png/│           ├── full_1mm/│           └── quarter_1mm/│       └── split/│           ├── train/│           │   ├── full/│           │   └── quarter/│           └── test/│               ├── full/│               └── quarter/├── models/                  # Model architectures (CGNet, Autoencoder)│   └── archs/               # CGNet and variants│   └── autoencoder/         # Autoencoder architectures├── datasets/                # Custom dataset classes├── losses/                  # Custom loss functions├── utils/                   # Utility functions and metrics├── scripts/                 # Executable scripts (train, test, preprocess, evaluate)├── experiments/             # Logs, checkpoints, and results from experiments├── requirements.txt         # Python dependencies├── setup.py                 # Optional: Project packaging└── README.md                # Project documentation
+## Setup
 
-git clone <repository_url>
-cd project_root
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository_url>
+    cd project_root
+    ```
 
-Create the directory structure:
+2.  **Create the directory structure:**
+    ```bash
+    mkdir -p \
+        configs \
+        data/{raw,processed/{converted_png/{full_1mm,quarter_1mm},split/{train/{full,quarter},test/{full,quarter}}}} \
+        models/{archs,autoencoder} \
+        datasets \
+        losses \
+        utils \
+        scripts \
+        experiments
+    ```
 
-mkdir -p {configs,data/{raw,processed/{converted_png/{full_1mm,quarter_1mm},split/{train/{full,quarter},test/{full,quarter}}}},models/{archs,autoencoder},datasets,losses,utils,scripts,experiments}
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Install dependencies:
+## Data Preparation
 
-pip install -r requirements.txt
+### Place your raw data:
 
-Place your raw data:
-Place your original .IMA files in data/raw/. You should create subdirectories within data/raw for different datasets or patients, e.g., data/raw/L067/full_1mm/ and data/raw/L067/quarter_1mm/.
+Store your original `.IMA` files in `data/raw/`. For example:
 
-Preprocess the data:
-Run the preprocessing script to convert .IMA to 3-channel .png and split the dataset. Adjust --data_dir and --output_dir as needed.
+data/raw/L067/full_1mm/data/raw/L067/quarter_1mm/
+### Preprocess the data:
 
-python scripts/preprocess_data.py --data_dir data/raw/L067 --output_dir data/processed --train_ratio 0.8 # Example usage
+Convert `.IMA` files to 3-channel `.png` format and split into training and test sets:
 
-Train the Autoencoder:
-The perceptual loss requires a pre-trained autoencoder. You need to train the AE separately using scripts/train_ae.py on your NDCT images.
+```
+python scripts/preprocess_data.py \
+    --data_dir data/raw/L067 \
+    --output_dir data/processed \
+    --train_ratio 0.8
+```
 
-python scripts/train_ae.py --config configs/ae_config.yaml # You will need to create ae_config.yaml
+## Autoencoder (AE)
 
-Ensure the trained AE checkpoint is saved to the path specified in your main CGNet training config (configs/default_config.yaml or your experiment-specific config).
+### Train the Autoencoder:
 
-Evaluate the Autoencoder (Recommended):
-Before training CGNet, evaluate the trained AE to ensure it reconstructs well.
+The perceptual loss requires a trained autoencoder. Train it separately on NDCT images:
 
-python scripts/evaluate_ae.py --config configs/ae_config.yaml --checkpoint path/to/your/trained_ae.pth
+```
+python scripts/train_ae.py --config configs/ae_config.yaml
+Ensure configs/ae_config.yaml is correctly configured with dataset and model settings.Evaluate the Autoencoder (Recommended):Evaluate the AE to ensure good reconstruction quality:python scripts/evaluate_ae.py \
+    --config configs/ae_config.yaml \
+    --checkpoint path/to/your/trained_ae.pth
+```
 
-Usage
-Configure your experiment:
-Edit or create a YAML file in the configs/ directory (e.g., configs/my_experiment.yaml) to define model parameters, dataset paths, training settings, etc. You can start by copying configs/default_config.yaml. Make sure the autoencoder.model_path points to your trained AE checkpoint.
+## CGNet Training and Evaluation
 
-Train the CGNet model:
-Run the training script, specifying your configuration file.
+### Configure your experiment:
 
+Create or edit a configuration file in `configs/`, for example:
+
+`configs/my_experiment.yaml`
+
+This should include model parameters, paths, training settings, and point to the AE checkpoint.
+
+### Train the CGNet:
+
+```
 python scripts/train.py --config configs/my_experiment.yaml
+# Logs and checkpoints will be stored in experiments/.Monitor training with TensorBoard:tensorboard --logdir experiments/
+#Test the model:
 
-Training progress, logs, and checkpoints will be saved in the experiments/ directory.
+python scripts/test.py \
+    --config configs/my_experiment.yaml \
+    --checkpoint experiments/<run_id>/<checkpoint>.pth \
+    --output_dir results/<run_id>
+```
 
-Monitor training:
-Use TensorBoard to visualize training metrics.
+### Evaluate model performance:
 
-tensorboard --logdir experiments/
-
-Test the model:
-Run the testing script to perform inference on the test set.
-
-python scripts/test.py --config configs/my_experiment.yaml --checkpoint experiments/your_run_timestamp/your_checkpoint.pth --output_dir results/your_run_timestamp
-
-Evaluate the model:
-Run the evaluation script to compute metrics (PSNR, SSIM) on a dataset using a trained model.
-
-python scripts/evaluate.py --config configs/my_experiment.yaml --checkpoint experiments/your_run_timestamp/your_checkpoint.pth
-
-Extending the Project
-Add new CGNet architectures: Create a new Python file for your model architecture in models/archs/ ending with _arch.py. Ensure it inherits from torch.nn.Module. Update the configs/ file with the new model.type.
-
-Add new Autoencoder architectures: Create a new Python file for your AE class in models/autoencoder/. Update the configs/ file with the new autoencoder.arch.type. Ensure it has a method or attribute to access the encoder part for feature extraction (e.g., .encoder or .get_features()).
-
-Add new datasets: Create a new Python file for your dataset class in datasets/ inheriting from torch.utils.data.Dataset. Update the configs/ file with the new dataset.type.
-
-Add new loss functions: Implement new loss functions in the losses/ directory. Modify CombinedLoss or create a new loss combination strategy.
-
-Add new metrics: Implement new metric calculation functions in utils/metrics.py.
-
-License
-[Specify your license here]
+```
+python scripts/evaluate.py \
+    --config configs/my_experiment.yaml \
+    --checkpoint experiments/<run_id>/<checkpoint>.pth
+```
